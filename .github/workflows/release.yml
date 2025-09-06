@@ -33,6 +33,7 @@ jobs:
 
   build-windows:
     runs-on: windows-latest
+    permissions: write-all
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -57,11 +58,12 @@ jobs:
       - name: Run tests
         run: ctest -C Release
         shell: cmd
+
       - name: Create package (ZIP)
         run: |
-          mkdir package
-          copy helloworld.exe package/
-          copy README.md package/
+          mkdir ./package
+          copy helloworld.exe ./package/
+          copy README.md ./package/
           7z a helloworld-0.0.${{ github.run_number }}-Windows.zip .\package\*
         shell: cmd
 
