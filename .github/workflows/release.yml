@@ -40,7 +40,8 @@ jobs:
           submodules: true
 
       - name: Install vcpkg dependencies
-        run: git clone https://github.com/Microsoft/vcpkg.git
+        run: |
+          git clone https://github.com/Microsoft/vcpkg.git
           ./vcpkg/bootstrap-vcpkg.sh
           ./vcpkg/vcpkg install boost-test 
         shell: bash
