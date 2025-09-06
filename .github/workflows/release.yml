@@ -62,7 +62,7 @@ jobs:
       - name: Create package (ZIP)
         run: |
           mkdir ./package
-          copy helloworld.exe ./package/
+          copy helloworld*.exe ./package/
           copy README.md ./package/
           7z a helloworld-0.0.${{ github.run_number }}-Windows.zip .\package\*
         shell: cmd
