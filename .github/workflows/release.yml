@@ -7,7 +7,7 @@ on:
       - feature/github_actions
 
 jobs:
-  build:
+  build-linux:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
@@ -39,3 +39,32 @@ jobs:
           asset_path: ./helloworld-0.0.${{ github.run_number }}-Linux.deb
           asset_name: helloworld-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
+  build-windows:
+    runs-on: windows-latest
+    permissions: write-all
+    needs: build-linux
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Install vcpkg and dependencies
+        run: |
+          git clone https://github.com/Microsoft/vcpkg.git
+          .\vcpkg\bootstrap-vcpkg.bat
+          .\vcpkg\vcpkg install boost-test
+      - name: Configure with CMake
+        run: |
+          cmake . -DPATCH_VERSION=${{ github.run_number }} -DCMAKE_TOOLCHAIN_FILE="vcpkg/scripts/buildsystems/vcpkg.cmake"
+      - name: Build project
+        run: cmake --build . --config Release
+      - name: Run tests
+        run: ctest -C Release
+      - name: Upload Windows Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.build-linux.outputs.upload_url }}
+          asset_path: ./helloworld-0.0.${{ github.run_number }}-Windows.zip
+          asset_name: helloworld-0.0.${{ github.run_number }}-Windows.zip
+          asset_content_type: application/zip
