@@ -71,12 +71,12 @@ jobs:
     permissions: write-all
     steps:
       - name: Download Linux Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: linux-package
 
       - name: Download Windows Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: windows-package
 
