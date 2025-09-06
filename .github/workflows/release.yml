@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-package
-          path: build/Release/helloworld.exe
+          path: build/Release/helloworld_cli.exe
 
   create-release:
     runs-on: ubuntu-latest
